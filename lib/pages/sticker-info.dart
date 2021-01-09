@@ -1,11 +1,11 @@
-import 'package:admobtest/responses-page.dart';
+import 'file:///D:/svago-fun/admobtest/lib/services/responses-page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_whatsapp_stickers/flutter_whatsapp_stickers.dart';
-import 'package:admobtest/custom-admob.dart';
+import 'file:///D:/svago-fun/admobtest/lib/services/custom-admob.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:admobtest/string-resources.dart';
+import 'package:admobtest/utils/string-resources.dart';
 class StickerPackInformation extends StatefulWidget {
   final List stickerPack;
 
@@ -51,6 +51,14 @@ class _StickerPackInformationState extends State<StickerPackInformation> {
     super.initState();
     _bannerAd = customAdMob.bannerAd()..load()..show();
     _interstitialAd = customAdMob.interstitialAd()..load();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _bannerAd?.dispose();
+    _interstitialAd.dispose();
   }
 
   @override
@@ -106,7 +114,7 @@ class _StickerPackInformationState extends State<StickerPackInformation> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text("${stickerPack[1]} Stickers"),
+        title: Text("${stickerPack[1]} "),
       ),
       body: Column(
         children: <Widget>[

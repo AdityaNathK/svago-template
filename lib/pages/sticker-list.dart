@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:admobtest/custom-admob.dart';
-import 'package:admobtest/responses-page.dart';
-import 'package:admobtest/sticker-info.dart';
+import 'file:///D:/svago-fun/admobtest/lib/services/custom-admob.dart';
+import 'file:///D:/svago-fun/admobtest/lib/services/responses-page.dart';
+import 'file:///D:/svago-fun/admobtest/lib/pages/sticker-info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_whatsapp_stickers/flutter_whatsapp_stickers.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:admobtest/string-resources.dart';
+import 'package:admobtest/utils/string-resources.dart';
+
 class StaticContent extends StatefulWidget {
   @override
   _StaticContentState createState() => _StaticContentState();
@@ -83,7 +84,7 @@ class _StaticContentState extends State<StaticContent> {
     Timer(Duration(seconds: 10),(){
       _bannerAd.show();
     });
-    Timer(Duration(seconds: 10),(){
+    Timer(Duration(seconds: 15),(){
       _interstitialAd.show();
     });
     return ListView.separated(
@@ -99,6 +100,7 @@ class _StaticContentState extends State<StaticContent> {
             var stickerName = stickerList[index]['name'];
             var stickerPublisher = stickerList[index]['publisher'];
             var stickerTrayIcon = stickerList[index]['tray_image_file'];
+            var stickerNumber = stickerList[index]['total_stickers'];
             var tempStickerList = List();
 
 
@@ -113,6 +115,7 @@ class _StaticContentState extends State<StaticContent> {
             tempStickerList.add(stickerList[index]['publisher']);
             tempStickerList.add(stickerList[index]['tray_image_file']);
             tempStickerList.add(stickerList[index]['stickers']);
+            tempStickerList.add(stickerList[index]['total_stickers']);
             tempStickerList.add(stickerInstalled);
             tempStickerList.add(installedStickers);
 
@@ -123,13 +126,14 @@ class _StaticContentState extends State<StaticContent> {
               stickerId,
               stickerTrayIcon,
               stickerInstalled,
+              stickerNumber
             );
           }
         },
       separatorBuilder: (context, index){
           return index % 4== 0? Container(
             margin: EdgeInsets.all(10),
-            height: 80,
+            height: 60,
             child: NativeAdmob(
               adUnitID: NativeAd.testAdUnitId,
               controller: _nativeAdController,
@@ -144,7 +148,8 @@ class _StaticContentState extends State<StaticContent> {
     );
   }
 
-  Widget stickerPack(List stickerList, String name,String publisher, String identifier, String stickerTrayIcon, bool installed) {
+  Widget stickerPack(List stickerList, String name,String publisher, String
+  identifier, String stickerTrayIcon, bool installed,String total) {
     Widget depInstallWidget;
     if (installed==true) {
       depInstallWidget = IconButton(
@@ -163,7 +168,7 @@ class _StaticContentState extends State<StaticContent> {
         color: Colors.teal,
         tooltip: Strings.addToWhatsApp,
         onPressed: () async {
-          _interstitialAd?.show();
+          _interstitialAd..show();
           _waStickers.addStickerPack(
             packageName: WhatsAppPackage.Consumer,
             stickerPackIdentifier: identifier,
@@ -184,20 +189,22 @@ class _StaticContentState extends State<StaticContent> {
 
     return Container(
       padding: EdgeInsets.all(10.0),
-      child: ListTile(
-        onTap: (){
-          _interstitialAd?.show();
-          Navigator.of(context).push( MaterialPageRoute(
-            builder: (BuildContext context) =>StickerPackInformation(stickerList),
-          ));
-        },
-        title: Text("$name"),
-        subtitle: Text("$publisher"),
-        leading: Image.asset("sticker_packs/$identifier/$stickerTrayIcon"),
-        trailing: Column(
-          children: <Widget>[
-            depInstallWidget,
-          ],
+      child: Container(
+        child: ListTile(
+          onTap: (){
+            _interstitialAd?.show();
+            Navigator.of(context).push( MaterialPageRoute(
+              builder: (BuildContext context) =>StickerPackInformation(stickerList),
+            ));
+          },
+          title: Text("$name"),
+          subtitle: Text("$publisher" + " | $total Stickers"),
+          leading: Image.asset("sticker_packs/$identifier/$stickerTrayIcon"),
+          // Column(
+          //   children: <Widget>[
+          //     // depInstallWidget,
+          //   ],
+          // ),
         ),
       ),
     );

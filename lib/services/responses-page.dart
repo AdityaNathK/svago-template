@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_whatsapp_stickers/flutter_whatsapp_stickers.dart';
-import 'package:admobtest/string-resources.dart';
+import 'package:admobtest/utils/string-resources.dart';
 
 Future<void> processResponse(
     {StickerPackResult action,

@@ -1,8 +1,8 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:admobtest/string-resources.dart';
-import 'home-page.dart';
-
+import 'package:admobtest/utils/string-resources.dart';
+import 'pages/home-page.dart';
+import 'package:admobtest/utils/styling.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseAdMob.instance.initialize(appId: Strings.adMobAppId);
@@ -21,6 +21,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: Strings.mainTitle,
+      theme: ThemeData(
+        primaryColor: AppTheme.primaryColor,
+      ),
       home: HomePage(),
     );
   }

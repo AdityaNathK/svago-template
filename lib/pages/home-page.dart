@@ -1,6 +1,6 @@
-import 'package:admobtest/sticker-list.dart';
+import 'file:///D:/svago-fun/admobtest/lib/pages/sticker-list.dart';
 import 'package:flutter/material.dart';
-import 'package:admobtest/string-resources.dart';
+import 'package:admobtest/utils/string-resources.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
