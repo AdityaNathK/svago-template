@@ -31,6 +31,7 @@ dependencies:
   firebase_admob: ^0.10.3
   flutter_whatsapp_stickers:
   url_launcher:
+  flutter_native_admob: ^2.1.0+3
 
 dev_dependencies:
   flutter_test:

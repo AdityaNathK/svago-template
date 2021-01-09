@@ -1,8 +1,11 @@
 import 'package:admobtest/responses-page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_whatsapp_stickers/flutter_whatsapp_stickers.dart';
 import 'package:admobtest/custom-admob.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admobtest/string-resources.dart';
 class StickerPackInformation extends StatefulWidget {
   final List stickerPack;
 
@@ -14,6 +17,8 @@ class StickerPackInformation extends StatefulWidget {
 class _StickerPackInformationState extends State<StickerPackInformation> {
 
   CustomAdMob customAdMob = CustomAdMob();
+  InterstitialAd _interstitialAd;
+  BannerAd _bannerAd;
 
   List stickerPack;
   final WhatsAppStickers _waStickers = WhatsAppStickers();
@@ -43,26 +48,24 @@ class _StickerPackInformationState extends State<StickerPackInformation> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    showInterstetialAd();
+    _bannerAd = customAdMob.bannerAd()..load()..show();
+    _interstitialAd = customAdMob.interstitialAd()..load();
   }
 
-  showInterstetialAd(){
-    customAdMob.interstitialAd()
-      ..load()
-      ..show(
-        anchorOffset: 0.0,
-        horizontalCenterOffset: 0.0,
-      );
-  }
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(seconds: 5),(){
+      _interstitialAd.show();
+    });
     List totalStickers = stickerPack[4];
     List<Widget> fakeBottomButtons = new List<Widget>();
     fakeBottomButtons.add(
       Container(
         height: 50.0,
+        child: Text(
+            Strings.bottomAdSpace.toUpperCase()
+        ),
       ),
     );
     Widget depInstallWidget;
@@ -70,17 +73,18 @@ class _StickerPackInformationState extends State<StickerPackInformation> {
       depInstallWidget =  Padding(
         padding: const EdgeInsets.symmetric(vertical:8.0),
         child: Text("Sticker Added",style: TextStyle(
-            color: Colors.green,
+            color: Colors.teal,
             fontSize: 16.0,
             fontWeight: FontWeight.bold
         ),),
       );
     } else {
       depInstallWidget =RaisedButton(
-        child: Text("Add Sticker"),
+        child: Text(Strings.addNow),
         textColor: Colors.white,
         color: Colors.teal[900],
         onPressed: () async {
+          _interstitialAd?.show();
           _waStickers.addStickerPack(
             packageName: WhatsAppPackage.Consumer,
             stickerPackIdentifier: stickerPack[0],

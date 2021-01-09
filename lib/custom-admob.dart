@@ -10,7 +10,7 @@ class CustomAdMob{
   BannerAd bannerAd(){
     return   BannerAd(
       adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.smartBanner,
+      size: AdSize.fullBanner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("BannerAd event is $event");

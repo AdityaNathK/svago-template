@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:admobtest/custom-admob.dart';
 import 'package:admobtest/responses-page.dart';
 import 'package:admobtest/sticker-info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_whatsapp_stickers/flutter_whatsapp_stickers.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:admobtest/string-resources.dart';
 class StaticContent extends StatefulWidget {
   @override
   _StaticContentState createState() => _StaticContentState();
@@ -13,6 +18,10 @@ class StaticContent extends StatefulWidget {
 class _StaticContentState extends State<StaticContent> {
 
   CustomAdMob customAdMob = CustomAdMob();
+  InterstitialAd _interstitialAd;
+  BannerAd _bannerAd;
+  final _nativeAdController = NativeAdmobController();
+
   final WhatsAppStickers _waStickers = WhatsAppStickers();
   List stickerList = new List();
   List installedStickers = new List();
@@ -57,28 +66,35 @@ class _StaticContentState extends State<StaticContent> {
   void initState() {
     super.initState();
     _loadStickers();
-    showInterstetialAd();
+    _bannerAd = customAdMob.bannerAd()..load();
+    _interstitialAd = customAdMob.interstitialAd()..load();
   }
 
-  showInterstetialAd(){
-    customAdMob.interstitialAd()
-      ..load()
-      ..show(
-        anchorOffset: 0.0,
-        horizontalCenterOffset: 0.0,
-      );
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _bannerAd?.dispose();
+    _interstitialAd.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    Timer(Duration(seconds: 10),(){
+      _bannerAd.show();
+    });
+    Timer(Duration(seconds: 10),(){
+      _interstitialAd.show();
+    });
+    return ListView.separated(
         itemCount: stickerList.length,
         itemBuilder: (context, index){
           if(stickerList.length==0){
             return Container(
               child: CircularProgressIndicator(),
             );
-          }else{
+          }
+          else{
             var stickerId = stickerList[index]['identifier'];
             var stickerName = stickerList[index]['name'];
             var stickerPublisher = stickerList[index]['publisher'];
@@ -109,7 +125,22 @@ class _StaticContentState extends State<StaticContent> {
               stickerInstalled,
             );
           }
-        }
+        },
+      separatorBuilder: (context, index){
+          return index % 4== 0? Container(
+            margin: EdgeInsets.all(10),
+            height: 80,
+            child: NativeAdmob(
+              adUnitID: NativeAd.testAdUnitId,
+              controller: _nativeAdController,
+              type: NativeAdmobType.banner,
+              loading: Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: Text("No Ads to show Today"),
+            )
+          ):Container();
+      },
     );
   }
 
@@ -121,7 +152,7 @@ class _StaticContentState extends State<StaticContent> {
           Icons.check,
         ),
         color: Colors.teal,
-        tooltip: 'Add Sticker to WhatsApp',
+        tooltip: Strings.addToWhatsApp,
         onPressed: (){},
       );
     } else {
@@ -130,8 +161,9 @@ class _StaticContentState extends State<StaticContent> {
           Icons.add,
         ),
         color: Colors.teal,
-        tooltip: 'Add Sticker to WhatsApp',
+        tooltip: Strings.addToWhatsApp,
         onPressed: () async {
+          _interstitialAd?.show();
           _waStickers.addStickerPack(
             packageName: WhatsAppPackage.Consumer,
             stickerPackIdentifier: identifier,
@@ -154,6 +186,7 @@ class _StaticContentState extends State<StaticContent> {
       padding: EdgeInsets.all(10.0),
       child: ListTile(
         onTap: (){
+          _interstitialAd?.show();
           Navigator.of(context).push( MaterialPageRoute(
             builder: (BuildContext context) =>StickerPackInformation(stickerList),
           ));

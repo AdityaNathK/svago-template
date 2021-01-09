@@ -10,6 +10,14 @@ class Strings{
   static const mainTitle = "Svago : Fun and Entertainment";
   static const mainAppBarTitle = "SVAGO";
   static const creditsAppBarTitle = "Svago";
+  static const bottomAdSpace = "By,\nKronos Apps";
+  static const addToWhatsApp = "Add Sticker to WhatsApp";
+  static const addNow = "Add Sticker";
+  static const cancelledAdding = "Cancelled Sticker Pack Install";
+  static const unknownError = "Unkown Error - check the logs";
+
+
+
 
 //  Routing Constants
   static const homePageRoute = "/";

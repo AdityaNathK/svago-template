@@ -1,6 +1,5 @@
 import 'package:admobtest/sticker-list.dart';
 import 'package:flutter/material.dart';
-import 'package:admobtest/custom-admob.dart';
 import 'package:admobtest/string-resources.dart';
 class HomePage extends StatefulWidget {
   @override
@@ -8,13 +7,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     List<Widget> fakeBottomButtons = new List<Widget>();
     fakeBottomButtons.add(
       Container(
         height: 50.0,
+        child: Text(
+          Strings.bottomAdSpace.toUpperCase()
+        ),
       ),
     );
 

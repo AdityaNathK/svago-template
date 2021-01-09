@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_whatsapp_stickers/flutter_whatsapp_stickers.dart';
+import 'package:admobtest/string-resources.dart';
 
 Future<void> processResponse(
     {StickerPackResult action,
@@ -22,13 +23,13 @@ Future<void> processResponse(
       successCallback();
       break;
     case StickerPackResult.CANCELLED:
-      snackBar = SnackBar(content: Text('Cancelled Sticker Pack Install'));
+      snackBar = SnackBar(content: Text(Strings.cancelledAdding));
       break;
     case StickerPackResult.ERROR:
       snackBar = SnackBar(content: Text(error));
       break;
     case StickerPackResult.UNKNOWN:
-      snackBar = SnackBar(content: Text('Unkown Error - check the logs'));
+      snackBar = SnackBar(content: Text(Strings.unknownError));
       break;
   }
 
