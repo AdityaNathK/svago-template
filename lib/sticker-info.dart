@@ -2,7 +2,7 @@ import 'package:admobtest/responses-page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_whatsapp_stickers/flutter_whatsapp_stickers.dart';
-
+import 'package:admobtest/custom-admob.dart';
 class StickerPackInformation extends StatefulWidget {
   final List stickerPack;
 
@@ -12,6 +12,9 @@ class StickerPackInformation extends StatefulWidget {
 }
 
 class _StickerPackInformationState extends State<StickerPackInformation> {
+
+  CustomAdMob customAdMob = CustomAdMob();
+
   List stickerPack;
   final WhatsAppStickers _waStickers = WhatsAppStickers();
 
@@ -38,6 +41,21 @@ class _StickerPackInformationState extends State<StickerPackInformation> {
     print("${stickerPack[6]}");
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    showInterstetialAd();
+  }
+
+  showInterstetialAd(){
+    customAdMob.interstitialAd()
+      ..load()
+      ..show(
+        anchorOffset: 0.0,
+        horizontalCenterOffset: 0.0,
+      );
+  }
   @override
   Widget build(BuildContext context) {
     List totalStickers = stickerPack[4];
